@@ -11,7 +11,7 @@ function App() {
     <>
       <section id="center">
         <div>
-          <h1>Hello</h1>
+          <h1>Shit</h1>
           
         </div>
       </section>
