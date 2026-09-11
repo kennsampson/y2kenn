@@ -1,111 +1,456 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/* Y2Kenn Brand Guidelines v1.0, pp. 5–7, 13–14, 17.
+   Fonts are loaded by the existing Google Fonts stylesheet in index.html.
+   Keep Tailwind defaults; extend them with explicit brand tokens. */
+@theme {
+  --color-brand-black: #000000;
+  --color-brand-white: #ffffff;
+  --color-brand-pink: #ff209c;
+  --color-brand-cyan: #21d9ed;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "Space Mono", monospace;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --text-hero: clamp(2.5rem, 7vw, 6rem);
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -0.04em;
+  --text-hero--font-weight: 800;
+  --text-section: clamp(1.75rem, 4vw, 3.5rem);
+  --text-section--line-height: 1.1;
+  --text-section--letter-spacing: -0.03em;
+  --text-section--font-weight: 800;
+  --text-project: clamp(1.25rem, 2.5vw, 2rem);
+  --text-project--line-height: 1.2;
+  --text-project--font-weight: 700;
+  --text-body: clamp(1rem, 0.9rem + 0.3vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+  --text-ui: clamp(0.875rem, 0.8rem + 0.2vw, 1rem);
+  --text-ui--line-height: 1.3;
+  --text-ui--font-weight: 700;
+  --text-meta: clamp(0.75rem, 0.7rem + 0.15vw, 0.8125rem);
+  --text-meta--line-height: 1.4;
+  --text-meta--letter-spacing: 0.04em;
+  --text-meta--font-weight: 400;
+
+  /* Default spacing remains 4px: use 2/4/6/8/12/16/24 for the 8px rhythm. */
+  --spacing-page: clamp(1.25rem, 2.5vw, 2rem);
+  --spacing-section: clamp(3rem, 8vw, 6rem);
+  --spacing-hit: 2.75rem;
+  --container-content: 80rem;
+  --container-copy: 65ch;
+  --radius-brand: 0;
+  --shadow-brand: 4px 4px 0 #000000;
+  --ease-brand: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Named guide breakpoints preserve existing sm/md/lg/xl behavior. */
+  --breakpoint-tablet: 48rem;
+  --breakpoint-desktop: 75rem;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-black);
+  }
+
+  body {
+    @apply text-body;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-pink);
+    color: var(--color-brand-black);
+  }
+
+  /* Two-color focus treatment stays visible on every brand surface. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-black);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--color-brand-cyan);
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer components {
+  /* Complete type roles; text-* utilities alone do not set font-family. */
+  .type-hero {
+    @apply font-display text-hero uppercase;
+    text-wrap: balance;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .type-section {
+    @apply font-display text-section uppercase;
+    text-wrap: balance;
+  }
+
+  .type-project {
+    @apply font-body text-project;
+    text-wrap: balance;
+  }
+
+  .type-body {
+    @apply font-body text-body;
+  }
+
+  .type-ui {
+    @apply font-body text-ui;
+  }
+
+  .type-meta,
+  .eyebrow {
+    @apply font-mono text-meta;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+  }
+
+  .page-shell {
+    width: 100%;
+    /* 1280px usable content, plus the page gutters. */
+    max-width: calc(var(--container-content) + 2 * var(--spacing-page));
+    margin-inline: auto;
+    padding-inline: var(--spacing-page);
+  }
+
+  .section-space {
+    padding-block: var(--spacing-section);
+  }
+
+  .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+
+  /* Each named button variant works alone, including existing btn-secondary. */
+  :where(.btn, .btn-primary, .btn-secondary, .btn-pink, .btn-cyan, .btn-ghost) {
+    @apply font-body text-ui;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: var(--spacing-hit);
+    min-width: var(--spacing-hit);
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-brand-black);
+    border-radius: var(--radius-brand);
+    background-color: var(--color-brand-black);
+    color: var(--color-brand-white);
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 150ms var(--ease-brand),
+      color 150ms var(--ease-brand),
+      transform 150ms var(--ease-brand);
+  }
+
+  .btn-secondary {
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-black);
+  }
+
+  .btn-pink {
+    background-color: var(--color-brand-pink);
+    color: var(--color-brand-black);
+  }
+
+  .btn-cyan {
+    background-color: var(--color-brand-cyan);
+    color: var(--color-brand-black);
+  }
+
+  .btn-ghost {
+    border-color: currentColor;
+    background-color: transparent;
+    color: inherit;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1rem;
+  }
+
+  .btn-lg {
+    min-height: 3.5rem;
+    padding: 1rem 2rem;
+  }
+
+  .btn-icon {
+    width: var(--spacing-hit);
+    height: var(--spacing-hit);
+    padding: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  :where(.btn, .btn-primary, .btn-secondary, .btn-pink, .btn-cyan, .btn-ghost)
+    :where(.icon) {
+    transition: transform 150ms var(--ease-brand);
+  }
+
+  @media (hover: hover) {
+    :where(
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-pink,
+        .btn-cyan,
+        .btn-ghost
+      ):hover:not(:disabled):not([aria-disabled="true"]) {
+      text-decoration: none;
+      text-underline-offset: 0.25em;
+    }
+
+    :where(
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-pink,
+        .btn-cyan,
+        .btn-ghost
+      ):hover:not(:disabled):not([aria-disabled="true"])
+      .icon {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  :where(
+      .btn,
+      .btn-primary,
+      .btn-secondary,
+      .btn-pink,
+      .btn-cyan,
+      .btn-ghost
+    ):active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(1px);
+  }
+
+  :where(
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-pink,
+    .btn-cyan,
+    .btn-ghost,
+    .nav-link
+  ):is([aria-current="page"], [aria-pressed="true"]) {
+    text-decoration: none;
+  }
+
+  :where(
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-pink,
+    .btn-cyan,
+    .btn-ghost,
+    .input,
+    .textarea,
+    .select
+  ):is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .nav-link {
+    @apply font-body text-ui;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--spacing-hit);
+    padding: 0.75rem 1rem;
+    color: inherit;
+    text-transform: uppercase;
+    text-underline-offset: 0.3em;
+  }
+
+  .menu-arrow {
+    transform: translate(2px, -2px);
+    transition: transform 150ms var(--ease-brand);
+    filter: invert(1);
+    height: 0.75rem;
+    width: 0.75rem;
+    flex-shrink: 0;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin: 0;
+  }
+
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+
+  .link-brand {
+    color: inherit;
+    /* text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em; */
+  }
+
+  .link-brand:hover {
+    text-decoration-thickness: 3px;
+  }
+
+  :where(.tag, .tag-pink, .tag-cyan, .tag-dark) {
+    @apply font-mono text-meta;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-brand-black);
+    border-radius: var(--radius-brand);
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-black);
+    text-transform: uppercase;
+  }
+
+  .tag-pink {
+    background-color: var(--color-brand-pink);
+  }
+  .tag-cyan {
+    background-color: var(--color-brand-cyan);
+  }
+  .tag-dark {
+    background-color: var(--color-brand-black);
+    color: var(--color-brand-white);
+  }
+
+  .panel {
+    border: 1px solid var(--color-brand-black);
+    border-radius: var(--radius-brand);
+    padding: 1.5rem;
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-black);
+  }
+
+  .divider {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid currentColor;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .field-label {
+    @apply font-body text-ui;
+  }
+  .field-hint {
+    @apply font-mono text-meta;
+  }
+
+  :where(.input, .textarea, .select) {
+    @apply font-body text-body;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--spacing-hit);
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-brand-black);
+    border-radius: var(--radius-brand);
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-black);
+  }
+
+  :where(.input, .textarea)::placeholder {
+    color: var(--color-brand-black);
+    opacity: 0.6;
+  }
+
+  .textarea {
+    min-height: 10rem;
+    resize: vertical;
+  }
+
+  :where(.input, .textarea, .select)[aria-invalid="true"] {
+    border-bottom: 4px double var(--color-brand-black);
+  }
+
+  .icon {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    object-fit: contain;
+    vertical-align: middle;
   }
 }
 
-body {
-  margin: 0;
+/* Utilities support responsive/state prefixes and can override components. */
+@utility surface-light {
+  background-color: var(--color-brand-white);
+  color: var(--color-brand-black);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+@utility surface-dark {
+  background-color: var(--color-brand-black);
+  color: var(--color-brand-white);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+@utility surface-pink {
+  background-color: var(--color-brand-pink);
+  color: var(--color-brand-black);
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+@utility surface-cyan {
+  background-color: var(--color-brand-cyan);
+  color: var(--color-brand-black);
+}
+
+/* A subtle CSS grid; the PDF's illustrated backgrounds need separate exports. */
+@utility bg-brand-grid {
+  background-image:
+    linear-gradient(to right, rgb(0 0 0 / 8%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 8%) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+}
+
+@utility duration-feedback {
+  transition-duration: 150ms;
+}
+@utility duration-menu {
+  transition-duration: 250ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Unlayered so motion utilities cannot override the user's preference. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+  :where(
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-pink,
+    .btn-cyan,
+    .btn-ghost
+  ):active,
+  :where(
+      .btn,
+      .btn-primary,
+      .btn-secondary,
+      .btn-pink,
+      .btn-cyan,
+      .btn-ghost
+    ):hover
+    .icon {
+    transform: none;
   }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }
